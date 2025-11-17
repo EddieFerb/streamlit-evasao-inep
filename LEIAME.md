@@ -1,0 +1,120 @@
+Projeto Prático de Aprendizado de Máquina com Streamlit – Reconhecimento de Padrões
+
+Este repositório apresenta uma aplicação completa para predição da evasão acadêmica em cursos de Instituições de Ensino Superior (IES) públicas utilizando os microdados do Censo da Educação Superior do INEP/MEC.  A aplicação foi desenvolvida no contexto da disciplina Reconhecimento de Padrões (2COP507) e segue as exigências dos professores Bruno Zarpelão e Sylvio Barbon Jr. para o projeto prático com Streamlit.  Além de demonstrar o pipeline de coleta, processamento e modelagem, a aplicação inclui uma interface interativa em Streamlit com opções de ajuste de hiperparâmetros e visualização de resultados.
+
+Objetivo
+
+Desenvolver uma aplicação prática que incorpore pelo menos um algoritmo de aprendizado de máquina estudado na disciplina (regressão, classificação ou ensembles).  O foco é aplicar técnicas de ciência de dados para estimar a taxa de evasão em cursos presenciais a partir dos microdados do INEP/MEC e disponibilizar os resultados por meio de uma interface amigável.  Nesta implementação utiliza‑se como modelo base a Random Forest, mas o pipeline permite testar outros algoritmos (Regressão Linear, RNA com fine‑tuning) conforme os requisitos.
+
+Estrutura de Pastas
+├── dados/                # Conjunto de dados utilizados no projeto
+│   ├── bruto/            # Dados brutos (microdados INEP) baixados diretamente das fontes oficiais
+│   ├── processado/       # Dados após limpeza e pré‑processamento
+│   └── intermediar/      # Dados temporários durante o tratamento
+├── modelos/              # Modelos treinados e métricas salvas
+├── notebooks/            # Jupyter notebooks exploratórios (opcional)
+├── scripts/              # Scripts Python para automação das etapas
+│   ├── coleta_dados/     # Coleta de microdados (ex.: coleta_dados_oficiais.py)
+│   ├── processamento/    # Pré‑processamento e engenharia de atributos
+│   ├── modelagem/        # Treinamento de modelos e fine‑tuning
+│   └── visualizacao/     # Geração de gráficos e relatórios
+├── app/                  # Aplicação Streamlit
+│   └── app_evasao.py     # Painel interativo com ajuste de hiperparâmetros
+├── requisitos.txt        # Dependências de projeto
+└── README.md             # Este documento
+
+Dependências
+	•	Python 3.8 ou superior
+	•	Streamlit￼ para a interface interativa
+	•	Bibliotecas de modelagem e visualização: pandas, numpy, scikit‑learn, seaborn, matplotlib
+	•	tensorflow/keras (opcional) para redes neurais
+	•	Consulte o arquivo requisitos.txt para a lista completa.  Instale as dependências com:
+
+    python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requisitos.txt
+
+Pipeline do Projeto
+
+1. Coleta dos Microdados
+
+Os microdados oficiais do INEP (2009–2023) são baixados diretamente das fontes públicas por meio do script scripts/coleta_dados/coleta_dados_oficiais.py.  Este script cria a estrutura de pastas em dados/bruto/ e armazena os arquivos CSV correspondentes aos censos anuais.  A etapa de coleta deve ser executada uma única vez:
+
+python scripts/coleta_dados/coleta_dados_oficiais.py
+
+2. Pré‑processamento e Análise Exploratória
+
+O pré‑processamento consiste em limpar e padronizar os dados, selecionar apenas os cursos presenciais e consolidar as variáveis de interesse.  Execute o script scripts/processamento/pre_processamento.py para unificar os anos e gerar os arquivos tratados em dados/processado/:
+
+python scripts/processamento/pre_processamento.py
+
+
+Esta etapa inclui:
+	•	Seleção das colunas relevantes (ex.: taxa_ingresso, taxa_conclusao, taxa_evasao, vagas_totais).
+	•	Correção de valores ausentes e conversão de tipos.
+	•	Geração de conjuntos dados_cursos_tratado.csv e dados_ies_tratado.csv para modelagem.
+	•	Análise exploratória básica (histogramas, mapas de calor), opcionalmente em Jupyter notebooks.
+
+3. Divisão de Dados e Engenharia de Atributos
+
+Os scripts da pasta scripts/processamento permitem preparar diferentes conjuntos de entrada.  Por exemplo, para Transfer Learning ou para combinações de features adicionais (media_geral, taxa_ingresso, taxa_conclusao).  Ajuste conforme a necessidade.  Para o projeto Streamlit, recomenda‑se começar com as variáveis taxa_ingresso e taxa_conclusao como preditoras da taxa_evasao.
+
+4. Modelagem
+
+Treine os modelos de machine learning disponíveis executando os scripts de modelagem:
+	•	Modelo original (Random Forest + Regressão Linear) – scripts/modelagem/treinamento_modelo_original.py
+	•	Modelo com engenharia de features (Random Forest) – scripts/modelagem/treinamento_modelo_Feature-based.py
+	•	Modelo com fine‑tuning de rede neural (ANN) – scripts/modelagem/treinamento_modelo_Fine-tuning.py (opcional)
+	•	Modelo com árvore C4.5/J48 – scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py (avaliado como alternativa)
+
+Os scripts dividem o conjunto de dados em treino e teste, treinam os modelos e registram métricas (MSE, R²) em modelos/resultados_modelos/.  Por padrão, o script treinamento_modelo_original.py compara Regressão Linear com Random Forest e salva o melhor modelo.  Você pode ajustar os hiperparâmetros diretamente nos scripts ou pelo painel Streamlit.
+
+5. Avaliação e Visualização
+
+Use scripts/visualizacao/gerar_graficos.py para gerar curvas de evolução das taxas de ingresso, conclusão e evasão, além de matrizes de confusão e comparativos entre modelos.  As métricas são salvas como PNG em modelos/resultados_modelos/.  Para validação temporal e comparações por curso, execute scripts/analises/validar_modelos_temporais.py e scripts/analises/comparar_predicoes_cursos.py.
+
+6. Interface Streamlit
+
+A aplicação interativa é implementada em app/app_evasao.py.  Este painel carrega o modelo treinado e permite:
+	•	Selecionar o curso (Administração, Direito, Engenharia Civil, Medicina) para análise.
+	•	Ajustar hiperparâmetros do modelo Random Forest através de sliders e caixas de seleção (por exemplo, número de árvores n_estimators, profundidade máxima max_depth e critério de divisão).  Estes controles são definidos com st.slider e st.selectbox.
+	•	Exibir métricas em tempo real (MSE, R²) e uma matriz de confusão para avaliação da classificação binária (evasão alta vs. baixa).
+	•	Plotar gráficos de linha comparando as taxas reais e preditas ao longo do tempo.
+
+Para executar o painel:
+
+streamlit run app/app_evasao.py
+
+7. Vídeo e Relatório
+
+Para a entrega final, grave um vídeo de até 15 minutos explicando: (1) a motivação do projeto, (2) como o pipeline foi construído, (3) o funcionamento do modelo e (4) a interface Streamlit.  Além disso, crie um artigo curto (até 4 páginas) no template da SBC descrevendo a escolha dos algoritmos, os hiperparâmetros testados (justificando os valores escolhidos) e discutindo os resultados e melhorias futuras.
+
+Sobre o Reuso dos Modelos
+
+Os modelos Random Forest já treinados nos scripts originais podem servir de baseline, mas recomenda‑se ajustá‑los quando integrados à aplicação Streamlit.  Dois motivos principais justificam o ajuste:
+	1.	Hiperparâmetros: os scripts fixam valores como n_estimators=100 e max_depth=None.  Para atender aos requisitos de interação, exponha esses parâmetros no painel para que o usuário possa ajustá‑los e observar o impacto nas métricas.
+	2.	Atualização de dados: o MVP descrito no Projeto Prático de Aprendizado de Máquina com Streamlit utilizou inicialmente dados de 2023 e, posteriormente, dados de 2009 a 2023.  Caso você utilize um recorte diferente ou incorpore novas features, é necessário re‑treinar o modelo para refletir essas alterações.  O pipeline automatizado permite refazer o treinamento sempre que novos dados forem incluídos.
+
+Portanto, reutilize a estrutura dos scripts de modelagem (funções de treinamento e salvamento), mas permita ajustes de hiperparâmetros no código ou pela interface.  Isso garantirá que a aplicação atenda aos critérios de avaliação (interface, implementação do modelo e documentação) estabelecidos pelos professores.
+
+Contribuição e Licença
+
+Este projeto foi desenvolvido por Eduardo Fernandes Bueno como Projeto Prático de Aprendizado de Máquina com Streamlit para a disciplina 2COP507.  Sinta‑se à vontade para clonar o repositório, testar outras combinações de algoritmos ou adicionar novos cursos.  A licença do projeto e informações adicionais podem ser encontradas em LICENCA.
+Contribuição, contato e citações
+
+- Autor: Eduardo Fernandes Bueno — desenvolvido como Projeto Prático de Aprendizado de Máquina com Streamlit a disciplina 2COP507 (Reconhecimento de Padrões).
+- Orientação/Professores: Prof. Bruno B. Zarpelão e Prof. Sylvio Barbon Jr.
+- Contato: veja o histórico de commits ou a seção de colaboradores no repositório para informações de contato e contribuições.
+
+Como citar este repositório
+- Eduardo F. Bueno (2025). Projeto Prático de Aprendizado de Máquina com Streamlit — Reconhecimento de Padrões (2COP507). Repositório GitHub. Disponível em: (inserir URL do repositório).
+
+Agradecimentos
+- Gratidão ao INEP/MEC pela disponibilização dos microdados e às disciplinas afins que forneceram a base teórica e prática para este projeto.
+
+Contribuições
+- Sinta‑se à vontade para clonar o repositório, abrir issues, submeter pull requests com correções, novas features ou inclusão de outros cursos e algoritmos. Consulte CONTRIBUTING.md (se presente) para orientações.
+
+Licença
+- Consulte o arquivo LICENCA para os termos de uso e distribuição.
+

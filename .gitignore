@@ -1,0 +1,75 @@
+# ============================
+# Dados e arquivos sensíveis (NÃO VERSIONAR)
+# ============================
+dados/
+modelos/
+resultados/
+relatorios/
+documentos/graficos/
+notebooks/
+acessibilidade_web/graficos/
+
+# Não versionar microdados, CSVs e textos derivados
+*.csv
+*.txt
+
+# PDFs grandes, relatórios finais, TCC etc.
+*.pdf
+
+# Logs e arquivos temporários
+*.log
+log_erros.txt
+*.tmp
+*.zip
+*.tar.gz
+
+# ============================
+# Modelos e artefatos treinados
+# ============================
+*.pkl
+*.h5
+
+# ============================
+# Ambientes virtuais e configs de ambiente
+# ============================
+.venv/
+env/
+ambiente/.venv/
+ambiente/ambiente.yml
+ambiente/requisitos.txt
+.env
+
+# ============================
+# Notebooks e checkpoints
+# ============================
+.ipynb_checkpoints/
+
+# ============================
+# Arquivos do sistema operacional
+# ============================
+.DS_Store
+.Trash/
+Thumbs.db
+
+# ============================
+# Arquivos temporários e de backup
+# ============================
+*~
+*.swp
+*.swo
+
+# ============================
+# Caches e compilados Python
+# ============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ============================
+# Configurações de IDEs/editores
+# ============================
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.Rproj.user
+*.Rproj
