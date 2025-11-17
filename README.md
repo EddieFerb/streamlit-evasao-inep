@@ -10,7 +10,7 @@ Folder Structure
 ├── dados/                # Dataset(s) used in the project
 │   ├── bruto/            # Raw data (INEP microdata) downloaded directly from official sources
 │   ├── processado/       # Data after cleaning and preprocessing
-│   └── intermediario/      # Temporary data generated during processing
+│   └── intermediario/    # Temporary data generated during processing
 ├── modelos/              # Trained models and saved metrics
 ├── notebooks/            # Exploratory Jupyter notebooks (optional)
 ├── scripts/              # Python scripts for process automation
@@ -43,15 +43,17 @@ pip install -r requisitos.txt
 Project Pipeline
 
 1. Microdata Collection
-The official INEP microdata (2009–2023) are downloaded directly from public sources using the script scripts/coleta_dados/coleta_dados_oficiais.py.
+The official INEP microdata (2009–2024) are downloaded directly from public sources using the script scripts/coleta_dados/coleta_dados_oficiais.py.
 This script creates the folder structure under dados/bruto/ and stores the CSV files corresponding to annual censuses.
 This collection step needs to be executed only once:
+python scripts/coleta_dados/coletar_links_inep.py
 python scripts/coleta_dados/coleta_dados_oficiais.py
 
 2. Preprocessing and Exploratory Analysis
 Preprocessing involves cleaning and standardizing the data, selecting only on-campus programs, and consolidating key variables.
 Run the script scripts/processamento/pre_processamento.py to unify the years and generate processed files under dados/processado/:
 python scripts/processamento/pre_processamento.py
+scripts/processamento_dados/processamento_dados/tratar_dados.py
 
 This step includes:
 	•	Selection of relevant columns (e.g. taxa_ingresso, taxa_conclusao, taxa_evasao, vagas_totais)
@@ -66,13 +68,13 @@ For the Streamlit project, it is recommended to start with the variables taxa_in
 
 4. Modeling
 Train the machine learning models by running the modeling scripts:
-	•	Original model (Random Forest + Linear Regression) — scripts/modelagem/treinamento_modelo_original.py
+	•	Original model (Random Forest + Linear Regression) — scripts/modelagem/modelagem/modelagem.py
 	•	Model with feature engineering (Random Forest) — scripts/modelagem/treinamento_modelo_Feature-based.py
 	•	Model with neural network fine-tuning (ANN) — scripts/modelagem/treinamento_modelo_Fine-tuning.py (optional)
 	•	C4.5/J48 decision tree model — scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py (evaluated as an alternative)
 
 These scripts split the dataset into training and testing subsets, train the models, and log the metrics (MSE, R²) under modelos/resultados_modelos/.
-By default, treinamento_modelo_original.py compares Linear Regression with Random Forest and saves the best model.
+By default, modelagem/modelagem.py compares Linear Regression with Random Forest and saves the best model.
 You can adjust the hyperparameters directly in the scripts or through the Streamlit panel.
 
 5. Evaluation and Visualization
@@ -105,7 +107,7 @@ Previously trained Random Forest models can serve as a baseline, but it is recom
 Two main reasons:
 	1.	Hyperparameters: The scripts currently define fixed values such as n_estimators=100 and max_depth=None.
 To meet interaction requirements, expose these parameters in the panel for users to adjust and observe the impact on metrics.
-	2.	Data updates: The MVP described in the Streamlit project initially used data from 2023, and later expanded to data from 2009 to 2023.
+	2.	Data updates: The MVP described in the Streamlit project initially used data from 2023, and later expanded to data from 2009 to 2024.
 If you use a different data subset or add new features, the model should be retrained to reflect these changes.
 
 Therefore, reuse the structure of the modeling scripts (training and saving functions), but allow hyperparameter adjustments in the code or interface.

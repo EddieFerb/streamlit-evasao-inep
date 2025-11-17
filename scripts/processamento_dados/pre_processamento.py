@@ -277,7 +277,7 @@ def main(year: int = 2024):
         print("Nenhum dado de Cursos para salvar.")
 
 if __name__ == "__main__":
-    # Processa todos os anos de 2009 a 2023.
-    for year in range(2009, 2024):
+    # Processa todos os anos de 2009 a 2024.
+    for year in range(2009, 2025):
         print(f"\tProcessing year {year} ...")
         main(year)

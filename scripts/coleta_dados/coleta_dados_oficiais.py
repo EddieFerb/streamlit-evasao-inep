@@ -74,6 +74,7 @@ def processar_microdados(caminho_pasta):
 def main():
     # URLs reais dos microdados
     urls = {
+        'INEP_2024-MICRODADOS-CENSO': 'https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2024.zip',
         'INEP_2023-MICRODADOS-CENSO': 'https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2023.zip',
         'INEP_2022-MICRODADOS-CENSO': 'https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2022.zip',
         'INEP_2021-MICRODADOS-CENSO': 'https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2021.zip',

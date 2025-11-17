@@ -38,8 +38,9 @@ Pipeline do Projeto
 
 1. Coleta dos Microdados
 
-Os microdados oficiais do INEP (2009–2023) são baixados diretamente das fontes públicas por meio do script scripts/coleta_dados/coleta_dados_oficiais.py.  Este script cria a estrutura de pastas em dados/bruto/ e armazena os arquivos CSV correspondentes aos censos anuais.  A etapa de coleta deve ser executada uma única vez:
+Os microdados oficiais do INEP (2009–2024) são baixados diretamente das fontes públicas por meio do script scripts/coleta_dados/coleta_dados_oficiais.py.  Este script cria a estrutura de pastas em dados/bruto/ e armazena os arquivos CSV correspondentes aos censos anuais.  A etapa de coleta deve ser executada uma única vez:
 
+python scripts/coleta_dados/coletar_links_inep.py
 python scripts/coleta_dados/coleta_dados_oficiais.py
 
 2. Pré‑processamento e Análise Exploratória
@@ -62,12 +63,12 @@ Os scripts da pasta scripts/processamento permitem preparar diferentes conjuntos
 4. Modelagem
 
 Treine os modelos de machine learning disponíveis executando os scripts de modelagem:
-	•	Modelo original (Random Forest + Regressão Linear) – scripts/modelagem/treinamento_modelo_original.py
+	•	Modelo original (Random Forest + Regressão Linear) – scripts/modelagem/modelagem/modelagem.py
 	•	Modelo com engenharia de features (Random Forest) – scripts/modelagem/treinamento_modelo_Feature-based.py
 	•	Modelo com fine‑tuning de rede neural (ANN) – scripts/modelagem/treinamento_modelo_Fine-tuning.py (opcional)
 	•	Modelo com árvore C4.5/J48 – scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py (avaliado como alternativa)
 
-Os scripts dividem o conjunto de dados em treino e teste, treinam os modelos e registram métricas (MSE, R²) em modelos/resultados_modelos/.  Por padrão, o script treinamento_modelo_original.py compara Regressão Linear com Random Forest e salva o melhor modelo.  Você pode ajustar os hiperparâmetros diretamente nos scripts ou pelo painel Streamlit.
+Os scripts dividem o conjunto de dados em treino e teste, treinam os modelos e registram métricas (MSE, R²) em modelos/resultados_modelos/.  Por padrão, o script modelagem/modelagem.py compara Regressão Linear com Random Forest e salva o melhor modelo.  Você pode ajustar os hiperparâmetros diretamente nos scripts ou pelo painel Streamlit.
 
 5. Avaliação e Visualização
 
@@ -93,7 +94,7 @@ Sobre o Reuso dos Modelos
 
 Os modelos Random Forest já treinados nos scripts originais podem servir de baseline, mas recomenda‑se ajustá‑los quando integrados à aplicação Streamlit.  Dois motivos principais justificam o ajuste:
 	1.	Hiperparâmetros: os scripts fixam valores como n_estimators=100 e max_depth=None.  Para atender aos requisitos de interação, exponha esses parâmetros no painel para que o usuário possa ajustá‑los e observar o impacto nas métricas.
-	2.	Atualização de dados: o MVP descrito no Projeto Prático de Aprendizado de Máquina com Streamlit utilizou inicialmente dados de 2023 e, posteriormente, dados de 2009 a 2023.  Caso você utilize um recorte diferente ou incorpore novas features, é necessário re‑treinar o modelo para refletir essas alterações.  O pipeline automatizado permite refazer o treinamento sempre que novos dados forem incluídos.
+	2.	Atualização de dados: o MVP descrito no Projeto Prático de Aprendizado de Máquina com Streamlit utilizou inicialmente dados de 2023 e, posteriormente, dados de 2009 a 2024.  Caso você utilize um recorte diferente ou incorpore novas features, é necessário re‑treinar o modelo para refletir essas alterações.  O pipeline automatizado permite refazer o treinamento sempre que novos dados forem incluídos.
 
 Portanto, reutilize a estrutura dos scripts de modelagem (funções de treinamento e salvamento), mas permita ajustes de hiperparâmetros no código ou pela interface.  Isso garantirá que a aplicação atenda aos critérios de avaliação (interface, implementação do modelo e documentação) estabelecidos pelos professores.
 

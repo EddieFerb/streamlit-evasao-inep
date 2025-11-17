@@ -13,9 +13,9 @@ from glob import glob
 color_map = {"Taxa de Conclusão": "green", "Taxa de Evasão": "red"}
 
 # =============================================================================
-# Leitura dos dados de cursos para os anos de 2009 a 2023
+# Leitura dos dados de cursos para os anos de 2009 a 2024
 # =============================================================================
-anos = range(2009, 2024)
+anos = range(2009, 2025)
 lista_cursos = []
 
 # Lista de colunas que devem ser numéricas
@@ -93,7 +93,7 @@ duracoes = {
 
 def calcular_metricas(df, curso, duracao):
     df_course = df[df["nome_curso"] == curso].copy()
-    for ano in range(2009 + duracao, 2024):
+    for ano in range(2009 + duracao, 2025):
         col_ing = f"ingressantes_{ano - duracao}"
         col_con = f"concluintes_{ano}"
         col_conclusao = f"taxa_conclusao_{ano}"

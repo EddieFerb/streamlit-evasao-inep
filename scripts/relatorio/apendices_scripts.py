@@ -17,7 +17,7 @@ script_paths = [
     "scripts/processamento_dados/processamento_dados/tratar_dados_Transfer_Learn.py",
     "scripts/processamento_dados/preparar_entrada_modelos.py",
     "scripts/modelagem/gerar_base_modelo.py",
-    "scripts/modelagem/treinamento_modelo_original.py",
+    "scripts/modelagem/modelagem/modelagem.py",
     "scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py",
     "scripts/modelagem/treinamento_modelo_Feature-based.py",
     "scripts/modelagem/treinamento_modelo_Fine-tuning.py",
