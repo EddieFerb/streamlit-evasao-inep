@@ -36,6 +36,51 @@ pip install -r requisitos.txt
 
 Pipeline do Projeto
 
+## Pipeline de execução
+
+1. Coletar links oficiais do INEP  
+   `python scripts/coleta_dados/coletar_links_inep.py`
+
+2. Baixar e organizar os microdados  
+   `python scripts/coleta_dados/coleta_dados_oficiais.py`
+
+3. Pré-processar e padronizar variáveis  
+   `python scripts/processamento_dados/pre_processamento.py`
+
+4. Tratar dados e gerar bases finais  
+   `python scripts/processamento_dados/tratar_dados.py`
+
+5. Análises exploratórias  
+   `python scripts/analises/analises.py`
+
+6. Treinar modelos de previsão  
+   `python scripts/modelagem/modelagem.py`
+
+7. Gerar gráficos para o relatório  
+   `python scripts/visualizacao/gerar_graficos.py`
+
+8. Subir dashboard Streamlit  
+   `streamlit run scripts/dashboard/app_evasao.py`
+
+⸻
+
+Executar o pipeline completo (Script Orquestrador)
+
+Execute todo o pipeline de ponta a ponta (coleta de dados, pré-processamento, modelagem e visualização) usando o script orquestrador. Certifique-se de que o ambiente virtual esteja ativado e que as dependências do arquivo requisitos.txt estejam instaladas antes de executar.
+
+Ative o ambiente virtual:
+   `source .venv/bin/activate`
+
+Rode o orchestrator:
+   `python scripts/rodar_pipline.py`
+
+Finalmente, rode manualmente o Streamlit dashboard 
+   `streamlit run scripts/dashboard/app_evasao.py`
+
+⸻
+
+
+
 1. Coleta dos Microdados
 
 Os microdados oficiais do INEP (2009–2024) são baixados diretamente das fontes públicas por meio do script scripts/coleta_dados/coleta_dados_oficiais.py.  Este script cria a estrutura de pastas em dados/bruto/ e armazena os arquivos CSV correspondentes aos censos anuais.  A etapa de coleta deve ser executada uma única vez:

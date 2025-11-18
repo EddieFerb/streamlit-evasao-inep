@@ -161,6 +161,9 @@ def main(year: int = 2024):
     if not df_ies.empty:
         try:
             df_ies_tratado = tratar_dados(df_ies, colunas_numericas=colunas_numericas_ies)
+            # Garante que a informação de ano seja preservada
+            if "ano" not in df_ies_tratado.columns:
+                df_ies_tratado["ano"] = year
             salvar_dados_tratados(df_ies_tratado, caminho_ies_tratado)
             salvar_dados_tratados(df_ies_tratado, caminho_ies_final)
         except ValueError as e:
@@ -177,6 +180,9 @@ def main(year: int = 2024):
     if not df_cursos.empty:
         try:
             df_cursos_tratado = tratar_dados(df_cursos, colunas_numericas=colunas_numericas_cursos)
+            # Garante que a informação de ano seja preservada
+            if "ano" not in df_cursos_tratado.columns:
+                df_cursos_tratado["ano"] = year
             salvar_dados_tratados(df_cursos_tratado, caminho_cursos_tratado)
             salvar_dados_tratados(df_cursos_tratado, caminho_cursos_final)
         except ValueError as e:
@@ -193,4 +199,3 @@ if __name__ == '__main__':
     salvar_taxas_consolidadas()
     df_taxas = ler_taxas_consolidadas()
     print(df_taxas.head())
-

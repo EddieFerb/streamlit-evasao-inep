@@ -41,6 +41,48 @@ pip install -r requisitos.txt
 ⸻
 
 Project Pipeline
+## Execution Pipeline
+
+1. Collect official INEP links  
+   `python scripts/coleta_dados/coletar_links_inep.py`
+
+2. Download and organize microdata  
+   `python scripts/coleta_dados/coleta_dados_oficiais.py`
+
+3. Preprocess and standardize variables  
+   `python scripts/processamento_dados/pre_processamento.py`
+
+4. Clean data and generate final datasets
+   `python scripts/processamento_dados/tratar_dados.py`
+
+5. Exploratory data analysis  
+   `python scripts/analises/analises.py`
+
+6. Train prediction models  
+   `python scripts/modelagem/modelagem.py`
+
+7. Generate charts for the report
+   `python scripts/visualizacao/gerar_graficos.py`
+
+8. Launch Streamlit dashboard 
+   `streamlit run scripts/dashboard/app_evasao.py`
+
+⸻
+
+Run the end-to-end pipeline (Orchestrator script)
+
+Execute the complete pipeline (data collection, preprocessing, modeling, and visualization) using the orchestrator script. Ensure the virtual environment is activated and dependencies from requisitos.txt are installed before running.
+
+Activate the virtual environment:
+   `source .venv/bin/activate`
+
+Run the orchestrator:
+   `python scripts/rodar_pipline.py`
+
+Then, run manually Launch Streamlit dashboard 
+   `streamlit run scripts/dashboard/app_evasao.py`
+
+⸻
 
 1. Microdata Collection
 The official INEP microdata (2009–2024) are downloaded directly from public sources using the script scripts/coleta_dados/coleta_dados_oficiais.py.

@@ -239,6 +239,8 @@ def main(year: int = 2024):
         df_ies = carregar_csv(caminho_ies, year=year)
         if not df_ies.empty:
             df_ies_final = filtrar_renomear(df_ies, COLUNAS_IES_RELEVANTES, MAPPING_IES)
+            # adiciona coluna de ano para possibilitar split temporal posterior
+            df_ies_final["ano"] = year
         else:
             print(f"Aviso: {ARQUIVO_IES} está vazio ou não pôde ser processado.")
     else:
@@ -252,6 +254,8 @@ def main(year: int = 2024):
         df_cursos = carregar_csv(caminho_cursos, year=year)
         if not df_cursos.empty:
             df_cursos_final = filtrar_renomear(df_cursos, COLUNAS_CURSOS_RELEVANTES, MAPPING_CURSOS)
+            # adiciona coluna de ano para possibilitar split temporal posterior
+            df_cursos_final["ano"] = year
         else:
             print(f"Aviso: {ARQUIVO_CURSOS} está vazio ou não pôde ser processado.")
     else:

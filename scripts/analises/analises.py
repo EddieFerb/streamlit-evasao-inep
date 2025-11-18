@@ -16,57 +16,115 @@ color_map = {"Taxa de Conclusão": "green", "Taxa de Evasão": "red"}
 # Leitura dos dados de cursos para os anos de 2009 a 2024
 # =============================================================================
 anos = range(2009, 2025)
+ANO_CORTE = 2018
 lista_cursos = []
 
 # Lista de colunas que devem ser numéricas
-numeric_cols = ["numero_cursos", "vagas_totais", "ingressantes", "concluintes", "inscritos_totais"]
+numeric_cols = [
+    "numero_cursos",
+    "vagas_totais",
+    "ingressantes",
+    "concluintes",
+    "inscritos_totais",
+]
 
 for ano in anos:
     caminho = f"dados/processado/dados_cursos_tratado_{ano}.csv"
     if os.path.exists(caminho):
-        df = pd.read_csv(caminho, sep=";", dtype=str)  # Ler tudo inicialmente como string
+        # Lê tudo inicialmente como string para depois converter colunas numéricas
+        df = pd.read_csv(caminho, sep=";", dtype=str)
         for col in numeric_cols:
             if col in df.columns:
-                df[col] = pd.to_numeric(df[col], errors='coerce')
+                df[col] = pd.to_numeric(df[col], errors="coerce")
         df["ano"] = ano
         lista_cursos.append(df)
     else:
         print(f"Arquivo não encontrado: {caminho}")
 
+if not lista_cursos:
+    raise FileNotFoundError(
+        "Nenhum arquivo 'dados_cursos_tratado_*.csv' foi encontrado para os anos especificados."
+    )
+
+# Concatena todos os anos e aplica split temporal (coerente com o pré-processamento)
 dados_cursos_tratado = pd.concat(lista_cursos, ignore_index=True)
+df_treino = dados_cursos_tratado[dados_cursos_tratado["ano"] <= ANO_CORTE]
+df_teste = dados_cursos_tratado[dados_cursos_tratado["ano"] > ANO_CORTE]
 
 # =============================================================================
 # Leitura dos dados de universidades (IES) – utilizando a base do ano 2023
 # =============================================================================
 ies_path = "dados/processado/dados_ies_tratado_2023.csv"
+if not os.path.exists(ies_path):
+    raise FileNotFoundError(
+        f"Arquivo de IES não encontrado em: {ies_path}. Verifique o pré-processamento."
+    )
+
 dados_ies_tratado = pd.read_csv(ies_path, sep=";", dtype=str)
 
 # =============================================================================
-# Unindo os dados de cursos e universidades
+# Unindo os dados de cursos (apenas período de treino) e universidades
 # =============================================================================
-all_data = pd.merge(dados_cursos_tratado, dados_ies_tratado, on="id_ies", how="left")
-all_data = all_data[(all_data["numero_cursos"].astype(float) > 0) & (all_data["nome_ies"].notnull())]
+
+all_data = pd.merge(df_treino, dados_ies_tratado, on="id_ies", how="left")
+if "ano_x" in all_data.columns and "ano_y" in all_data.columns:
+    all_data["ano"] = all_data["ano_x"]
+    all_data = all_data.drop(columns=["ano_x", "ano_y"])
+elif "ano_x" in all_data.columns:
+    all_data = all_data.rename(columns={"ano_x": "ano"})
+elif "ano_y" in all_data.columns:
+    all_data = all_data.rename(columns={"ano_y": "ano"})
+
+# Filtra para manter apenas IES com número de cursos válido e nome não nulo
+all_data = all_data[
+    (all_data["numero_cursos"].astype(float) > 0) & (all_data["nome_ies"].notnull())
+]
+
+# Normaliza textos
 all_data["nome_curso"] = all_data["nome_curso"].str.upper()
 all_data["nome_ies"] = all_data["nome_ies"].str.upper()
 
+# Converte colunas numéricas principais, se existirem
 for col in ["concluintes", "ingressantes", "inscritos_totais", "vagas_totais"]:
     if col in all_data.columns:
         all_data[col] = all_data[col].astype("Int64")
 
 # Removemos a variável 'tipo_rede' pois só aparece explicitamente a partir de 2023
-all_data["cat_adm"] = all_data["cat_adm"].replace({"1": "Federal", "2": "Estadual"}).fillna("Outro")
-all_data["modalidade_ensino"] = all_data["modalidade_ensino"].replace({"1": "Presencial", "2": "EAD"}).fillna("Outro")
+all_data["cat_adm"] = (
+    all_data["cat_adm"].replace({"1": "Federal", "2": "Estadual"}).fillna("Outro")
+)
+all_data["modalidade_ensino"] = (
+    all_data["modalidade_ensino"]
+    .replace({"1": "Presencial", "2": "EAD"})
+    .fillna("Outro")
+)
 
 # =============================================================================
 # Agrupamento e pivot dos dados para calcular taxas de conclusão e evasão
 # =============================================================================
-ingress = (all_data[["nome_curso", "modalidade_ensino", "ingressantes", "ano", "concluintes"]]
-           .groupby(["nome_curso", "modalidade_ensino", "ano"], as_index=False)
-           .agg({"ingressantes": "sum", "concluintes": "sum"}))
+ingress = (
+    all_data[[
+        "nome_curso",
+        "modalidade_ensino",
+        "ingressantes",
+        "ano",
+        "concluintes",
+    ]]
+    .groupby(["nome_curso", "modalidade_ensino", "ano"], as_index=False)
+    .agg({"ingressantes": "sum", "concluintes": "sum"})
+)
 
 # Pivotar os dados para 'ingressantes' e 'concluintes'
-pivot_ing = ingress.pivot_table(index=["nome_curso", "modalidade_ensino"], columns="ano", values="ingressantes")
-pivot_con = ingress.pivot_table(index=["nome_curso", "modalidade_ensino"], columns="ano", values="concluintes")
+pivot_ing = ingress.pivot_table(
+    index=["nome_curso", "modalidade_ensino"],
+    columns="ano",
+    values="ingressantes",
+)
+pivot_con = ingress.pivot_table(
+    index=["nome_curso", "modalidade_ensino"],
+    columns="ano",
+    values="concluintes",
+)
 
 # Renomeia as colunas com o padrão "ingressantes_{ano}" e "concluintes_{ano}"
 pivot_ing.columns = [f"ingressantes_{ano}" for ano in pivot_ing.columns]
@@ -84,12 +142,14 @@ ingress_wide = ingress_wide[ingress_wide["nome_curso"].isin(cursos_interesse)]
 # Fórmulas:
 #   Taxa de Conclusão = concluintes_{ano} / ingressantes_{ano - D}
 #   Taxa de Evasão = 1 - Taxa de Conclusão
+
 duracoes = {
     "ENGENHARIA CIVIL": 5,
     "MEDICINA": 6,
     "DIREITO": 5,
-    "ADMINISTRAÇÃO": 4
+    "ADMINISTRAÇÃO": 4,
 }
+
 
 def calcular_metricas(df, curso, duracao):
     df_course = df[df["nome_curso"] == curso].copy()
@@ -99,7 +159,7 @@ def calcular_metricas(df, curso, duracao):
         col_conclusao = f"taxa_conclusao_{ano}"
         col_evasao = f"taxa_evasao_{ano}"
         if col_ing in df_course.columns and col_con in df_course.columns:
-            # Evitar divisão por zero e valores não definidos:
+            # Evitar divisão por zero e valores não definidos
             df_course[col_conclusao] = df_course[col_con] / df_course[col_ing]
             df_course[col_evasao] = 1 - df_course[col_conclusao]
         else:
@@ -107,41 +167,52 @@ def calcular_metricas(df, curso, duracao):
             df_course[col_evasao] = np.nan
     return df_course
 
+
 df_eng = calcular_metricas(ingress_wide, "ENGENHARIA CIVIL", duracoes["ENGENHARIA CIVIL"])
 df_dir = calcular_metricas(ingress_wide, "DIREITO", duracoes["DIREITO"])
 df_med = calcular_metricas(ingress_wide, "MEDICINA", duracoes["MEDICINA"])
 df_adm = calcular_metricas(ingress_wide, "ADMINISTRAÇÃO", duracoes["ADMINISTRAÇÃO"])
 
+
 # Função para converter data frame wide em long para um dado prefixo e rótulo
 def pivot_long_metric(df, prefix, label):
     metric_cols = [col for col in df.columns if col.startswith(prefix)]
-    df_long = df.melt(id_vars=["nome_curso", "modalidade_ensino"],
-                      value_vars=metric_cols,
-                      var_name="ano", value_name="taxa")
+    df_long = df.melt(
+        id_vars=["nome_curso", "modalidade_ensino"],
+        value_vars=metric_cols,
+        var_name="ano",
+        value_name="taxa",
+    )
     df_long["ano"] = df_long["ano"].str.extract(r"(\d{4})")
     df_long["tipo"] = label
     return df_long
+
 
 # Criando data frames long para cada curso e para cada métrica
 eng_long_conclusao = pivot_long_metric(df_eng, "taxa_conclusao_", "Taxa de Conclusão")
 eng_long_evasao = pivot_long_metric(df_eng, "taxa_evasao_", "Taxa de Evasão")
 eng_civil_long = pd.concat([eng_long_conclusao, eng_long_evasao])
 
+
 dir_long_conclusao = pivot_long_metric(df_dir, "taxa_conclusao_", "Taxa de Conclusão")
 dir_long_evasao = pivot_long_metric(df_dir, "taxa_evasao_", "Taxa de Evasão")
 direito_long = pd.concat([dir_long_conclusao, dir_long_evasao])
+
 
 med_long_conclusao = pivot_long_metric(df_med, "taxa_conclusao_", "Taxa de Conclusão")
 med_long_evasao = pivot_long_metric(df_med, "taxa_evasao_", "Taxa de Evasão")
 medicina_long = pd.concat([med_long_conclusao, med_long_evasao])
 
+
 adm_long_conclusao = pivot_long_metric(df_adm, "taxa_conclusao_", "Taxa de Conclusão")
 adm_long_evasao = pivot_long_metric(df_adm, "taxa_evasao_", "Taxa de Evasão")
 administracao_long = pd.concat([adm_long_conclusao, adm_long_evasao])
 
+
 # =============================================================================
 # Plotagem com Plotly – duas linhas: uma para "Taxa de Conclusão" (verde) e outra para "Taxa de Evasão" (vermelha)
 # =============================================================================
+
 def plot_taxa(df_long, curso):
     fig = px.line(
         df_long,
@@ -151,11 +222,12 @@ def plot_taxa(df_long, curso):
         markers=True,
         title=f"Taxa de Evasão e Conclusão ao longo dos anos - Curso de {curso}",
         labels={"ano": "Ano de Ingresso", "taxa": "Taxa"},
-        color_discrete_map=color_map
+        color_discrete_map=color_map,
     )
     fig.update_yaxes(tickformat=".0%")
     fig.update_layout(legend=dict(orientation="v", title=dict(text="Métrica")))
     fig.show()
+
 
 plot_taxa(eng_civil_long, "Engenharia Civil")
 plot_taxa(direito_long, "Direito")
