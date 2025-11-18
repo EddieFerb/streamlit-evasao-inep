@@ -13,13 +13,13 @@ script_paths = [
     "scripts/coleta_dados/coleta_dados_oficiais.py",
     "scripts/processamento_dados/pre_processamento.py",
     "scripts/processamento_dados/pre_processamento_Transfer_Learn.py",
-    "scripts/processamento_dados/processamento_dados/tratar_dados.py",
-    "scripts/processamento_dados/processamento_dados/tratar_dados_Transfer_Learn.py",
+    "scripts/processamento_dados/tratar_dados.py",
+    "scripts/processamento_dados/tratar_dados_Transfer_Learn.py",
     "scripts/processamento_dados/preparar_entrada_modelos.py",
     "scripts/modelagem/gerar_base_modelo.py",
-    "scripts/modelagem/modelagem/modelagem.py",
+    "scripts/modelagem/modelagem.py",
     "scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py",
-    "scripts/modelagem/treinamento_modelo_Feature-based.py",
+    "scripts/modelagem/feature-based.py.py",
     "scripts/modelagem/treinamento_modelo_Fine-tuning.py",
     "scripts/analises/analises.py",
     "scripts/analises/comparar_modelos.py",
@@ -28,7 +28,7 @@ script_paths = [
     "scripts/analises/resumir_modelo_h5.py",
     "scripts/visualizacao/gerar_graficos.py",
     "scripts/visualizacao/comparar_predicoes_cursos.py",
-    "scripts/dashboard/app_evasao.py"
+    "scripts/dashboard/app_evasao.py",
 ]
 
 # Criação do documento Word

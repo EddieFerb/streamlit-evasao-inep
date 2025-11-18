@@ -191,7 +191,7 @@ def main(year: int = 2024):
         print("Nenhum dado de Cursos disponível para tratar.")
 
 if __name__ == '__main__':
-    for year in range(2025):
+    for year in range(2009, 2025):
         print(f"\tProcessing year {year} ...")
         main(year)
 

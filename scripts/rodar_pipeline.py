@@ -12,4 +12,5 @@ if __name__ == "__main__":
     run("python scripts/analises/analises.py")
     run("python scripts/modelagem/modelagem.py")
     run("python scripts/visualizacao/gerar_graficos.py")
-    # dashboard é manual: streamlit run scripts/dashboard/app_evasao.py
+    # dashboard rode manualmente: streamlit run scripts/dashboard/app_evasao.py
+    # dashboard run manually: streamlit run scripts/dashboard/app_evasao.py

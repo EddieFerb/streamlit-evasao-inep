@@ -111,7 +111,7 @@ For the Streamlit project, it is recommended to start with the variables taxa_in
 4. Modeling
 Train the machine learning models by running the modeling scripts:
 	•	Original model (Random Forest + Linear Regression) — scripts/modelagem/modelagem/modelagem.py
-	•	Model with feature engineering (Random Forest) — scripts/modelagem/treinamento_modelo_Feature-based.py
+	•	Model with feature engineering (Random Forest) — scripts/modelagem/feature-based.py.py
 	•	Model with neural network fine-tuning (ANN) — scripts/modelagem/treinamento_modelo_Fine-tuning.py (optional)
 	•	C4.5/J48 decision tree model — scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py (evaluated as an alternative)
 

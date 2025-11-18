@@ -109,7 +109,7 @@ Os scripts da pasta scripts/processamento permitem preparar diferentes conjuntos
 
 Treine os modelos de machine learning disponíveis executando os scripts de modelagem:
 	•	Modelo original (Random Forest + Regressão Linear) – scripts/modelagem/modelagem/modelagem.py
-	•	Modelo com engenharia de features (Random Forest) – scripts/modelagem/treinamento_modelo_Feature-based.py
+	•	Modelo com engenharia de features (Random Forest) – scripts/modelagem/feature-based.py.py
 	•	Modelo com fine‑tuning de rede neural (ANN) – scripts/modelagem/treinamento_modelo_Fine-tuning.py (opcional)
 	•	Modelo com árvore C4.5/J48 – scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py (avaliado como alternativa)
 
