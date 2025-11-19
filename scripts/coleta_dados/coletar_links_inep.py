@@ -1,8 +1,16 @@
 # scripts/coleta_dados/coletar_links_inep.py
 # Este script coleta os links dos microdados do Censo da Educação Superior do site do INEP (1995-2023).
 
+import os
+import sys
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+if ROOT_DIR not in sys.path:
+    sys.path.append(ROOT_DIR)
+
 import requests
 from bs4 import BeautifulSoup
+from scripts.utils.inspecao import registrar_ambiente
+
 
 def coletar_links_inep(url_base, palavra_chave):
     """
@@ -46,9 +54,11 @@ def main():
     url_base = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
     palavra_chave = "microdados_censo_da_educacao_superior"
     caminho_arquivo = "./dados/bruto/lista-links.txt"
+    registrar_ambiente(etapa="coletar_links_inep", contexto="início")
 
     print("Coletando links do INEP...")
     urls = coletar_links_inep(url_base, palavra_chave)
+    print(f"Total de links coletados: {len(urls)}")
     salvar_links_em_arquivo(urls, caminho_arquivo)
     print("Processo concluído.")
 

@@ -2,12 +2,20 @@
 # Processa os dados brutos (IES e Cursos) por ano, realizando limpeza, renomeação e formatação padronizada.
 
 import os
+import sys
 import pandas as pd
 import unicodedata
 import re
 import numpy as np
 from io import StringIO
 import glob
+
+# Garante que a pasta raiz do projeto (onde está `utils/`) esteja no sys.path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+from scripts.utils.inspecao import registrar_ambiente, auditar_csv
 
 # ==========================================================================
 # CONFIGURAÇÕES GERAIS
@@ -16,6 +24,8 @@ import glob
 # Diretórios de entrada e saída (ajuste conforme sua estrutura)
 PASTA_BRUTO = "./dados/bruto"
 PASTA_PROCESSADO = "./dados/processado"
+
+registrar_ambiente(etapa="pre_processamento", contexto="início")
 
 # ==========================================================================
 # COLUNAS DE INTERESSE E MAPEAMENTOS
@@ -277,6 +287,7 @@ def main(year: int = 2024):
         os.makedirs(os.path.dirname(saida_cursos), exist_ok=True)
         df_cursos_final.to_csv(saida_cursos, sep=";", index=False, encoding="utf-8")
         print(f"[OK] dados_cursos gerado em: {saida_cursos}")
+        auditar_csv(saida_cursos, etapa="pre_processado", contexto=f"cursos_{year}", n=5)
     else:
         print("Nenhum dado de Cursos para salvar.")
 

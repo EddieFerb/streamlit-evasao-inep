@@ -1,13 +1,29 @@
 # scripts/visualizacao/gerar_graficos.py
 # Este script gera gráficos para visualizar os resultados da análise.
 
+from pathlib import Path
+import sys
+
+# Garante que o diretório raiz (que contém 'scripts') esteja no sys.path
+CURRENT_DIR = Path(__file__).resolve()
+BASE_DIR = CURRENT_DIR
+while BASE_DIR.name != "scripts" and BASE_DIR.parent != BASE_DIR:
+    BASE_DIR = BASE_DIR.parent
+BASE_DIR = BASE_DIR.parent  # pai de 'scripts' é o raiz do projeto
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
+from scripts.utils.inspecao import registrar_ambiente, auditar_df
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import unicodedata
 
 def main():
-    df = pd.read_csv('dados/processado/dados_ingresso_evasao_conclusao.csv', sep=';', on_bad_lines='skip')
+    registrar_ambiente(etapa="visualizacao", contexto="inicio_gerar_graficos")
+    df = pd.read_csv('./dados/processado/dados_ingresso_evasao_conclusao.csv', sep=';', on_bad_lines='skip')
+    auditar_df(df, etapa="visualizacao", contexto="antes_dos_graficos", n=5)
     
     # Gráfico de distribuição da taxa de evasão
     plt.figure(figsize=(10,6))

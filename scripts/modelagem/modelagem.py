@@ -420,6 +420,16 @@
 # Avalia o desempenho de Regressão Linear e Random Forest, seleciona o melhor
 # modelo com base no R², e salva o modelo e as métricas em arquivos apropriados.
 
+import os
+import sys
+
+# Garante que o diretório raiz do projeto (onde está a pasta "scripts") esteja no sys.path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+from scripts.utils.inspecao import registrar_ambiente, auditar_df, auditar_csv
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
@@ -458,9 +468,21 @@ def main():
     - Imprime um resumo dos resultados no terminal em uma seção
       "Exibição de resultados", inspirada no exemplo KNN do Prof. Zarpelão.
     """
+    registrar_ambiente(etapa="modelagem", contexto="inicio_modelagem_base")
+
     # Caminho para os dados processados
     caminho_dados = "./dados/processado/dados_ingresso_evasao_conclusao.csv"
     df = pd.read_csv(caminho_dados, sep=";", encoding="utf-8", low_memory=False)
+
+    # Auditoria do dataframe carregado e split temporal 2009–2018 / 2019–2024
+    auditar_df(df, etapa="modelagem_base", contexto="df_carregado", n=5)
+
+    if "ano" in df.columns:
+        df_treino = df[df["ano"] <= 2018]
+        df_teste = df[df["ano"] > 2018]
+
+        auditar_df(df_treino, etapa="modelagem_base", contexto="treino_ate_2018", n=5)
+        auditar_df(df_teste, etapa="modelagem_base", contexto="teste_2019_2024", n=5)
 
     # Definir caminho_modelo (com caminho relativo) antes de utilizá-lo em qualquer parte
     caminho_modelo = "./modelos/modelos_salvos"

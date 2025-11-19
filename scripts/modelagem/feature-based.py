@@ -158,9 +158,19 @@ Modelagem de evasão — abordagem feature-based com Random Forest
 """
 
 import os
+import sys
 import joblib
 import numpy as np
 import pandas as pd
+
+# Garante que o diretório raiz do projeto (onde está a pasta "scripts") esteja no sys.path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+from scripts.utils.inspecao import registrar_ambiente, auditar_df, auditar_csv
+
+registrar_ambiente(etapa="modelagem_feature_based", contexto="inicio")
 
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -334,6 +344,8 @@ def treinar_regressao_tempo(
 
     print(f"Tamanho do treino (regressão): {X_train.shape}")
     print(f"Tamanho do teste  (regressão): {X_test.shape}")
+    auditar_df(X_train, etapa="modelagem_feature_based", contexto="X_train_regressao", n=5)
+    auditar_df(X_test,  etapa="modelagem_feature_based", contexto="X_test_regressao", n=5)
 
     base_regressor = RandomForestRegressor(
         random_state=42,
@@ -431,6 +443,8 @@ def treinar_classificacao_tempo(
 
     print(f"Tamanho do treino (classificação): {X_train.shape}")
     print(f"Tamanho do teste  (classificação): {X_test.shape}")
+    auditar_df(X_train, etapa="modelagem_feature_based", contexto="X_train_classificacao", n=5)
+    auditar_df(X_test,  etapa="modelagem_feature_based", contexto="X_test_classificacao", n=5)
 
     base_clf = RandomForestClassifier(
         random_state=42,
@@ -515,6 +529,7 @@ def main():
     garantir_pastas_modelos()
 
     df = carregar_dados()
+    auditar_df(df, etapa="modelagem_feature_based", contexto="df_carregado", n=5)
 
     # Split temporal fixo: 2009–2018 treino, 2019–2024 teste
     df_treino, df_teste = split_temporal(df, ano_treino_max=2018)

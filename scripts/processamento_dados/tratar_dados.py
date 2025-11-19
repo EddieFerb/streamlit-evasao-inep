@@ -2,11 +2,21 @@
 # Script responsável pelo carregamento, limpeza, tratamento, cálculo de taxas e consolidação de dados educacionais extraídos dos microdados do INEP/MEC.
 
 import os
+import sys
 import pandas as pd
 from pathlib import Path
 import re
 import glob
 import numpy as np
+
+# Garante que a raiz do projeto esteja no sys.path para permitir imports do pacote scripts
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+from scripts.utils.inspecao import registrar_ambiente, auditar_csv
+
+registrar_ambiente(etapa="tratar_dados", contexto="início")
 
 # Defina a variável global para a pasta processada
 PASTA_PROCESSADO = "./dados/processado"
@@ -116,6 +126,10 @@ def salvar_taxas_consolidadas():
     df_consolidado = calcular_taxas(df_consolidado)
     caminho_saida = os.path.join(PASTA_PROCESSADO, "dados_ingresso_evasao_conclusao.csv")
     salvar_dados_tratados(df_consolidado, caminho_saida)
+    auditar_csv(caminho_saida,
+                etapa="consolidado_final",
+                contexto="dados_ingresso_evasao_conclusao",
+                n=10)
     print(f"[OK] Dados consolidados e taxas salvos em: {caminho_saida}")
 
 def ler_taxas_consolidadas():
@@ -184,6 +198,10 @@ def main(year: int = 2024):
             if "ano" not in df_cursos_tratado.columns:
                 df_cursos_tratado["ano"] = year
             salvar_dados_tratados(df_cursos_tratado, caminho_cursos_tratado)
+            auditar_csv(caminho_cursos_tratado,
+                        etapa="tratado_intermediario",
+                        contexto=f"cursos_{year}",
+                        n=5)
             salvar_dados_tratados(df_cursos_tratado, caminho_cursos_final)
         except ValueError as e:
             print(f"Ano de {year} Erro ao processar dados de Cursos: {e}")

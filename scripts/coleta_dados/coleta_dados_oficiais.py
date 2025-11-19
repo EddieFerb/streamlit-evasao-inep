@@ -2,9 +2,18 @@
 # Este script realiza a coleta e processamento de microdados oficiais do INEP e MEC.
 
 import os
+import sys
 import requests
 import pandas as pd
 from zipfile import ZipFile
+
+# Ajuste de caminho para permitir importar `scripts.*` ao executar este arquivo diretamente
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(CURRENT_DIR))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+from scripts.utils.inspecao import registrar_ambiente, auditar_csv
 
 def baixar_arquivo(url, destino):
     """
@@ -71,6 +80,41 @@ def processar_microdados(caminho_pasta):
         print('Nenhum dado processado.')
         return pd.DataFrame()
 
+def baixar_dados_ano(fonte: str, url: str, pasta_dados: str):
+    """
+    Função auxiliar para baixar, extrair, processar e auditar os dados de um ano/fonte.
+    Mantém a mesma lógica já utilizada no laço de main(), mas adiciona auditoria.
+    """
+    zip_caminho = os.path.join(pasta_dados, f'{fonte}.zip')
+    pasta_extracao = os.path.join(pasta_dados, fonte)
+    os.makedirs(pasta_extracao, exist_ok=True)
+
+    # Registro de ambiente para auditoria
+    registrar_ambiente(etapa="coleta_bruta", contexto=fonte)
+
+    # Baixar o arquivo
+    print(f'Baixando dados da fonte: {fonte}')
+    baixar_arquivo(url, zip_caminho)
+
+    # Extrair o arquivo
+    print(f'Extraindo dados da fonte: {fonte}')
+    extrair_arquivo(zip_caminho, pasta_extracao)
+
+    # Processar os dados
+    print(f'Processando dados da fonte: {fonte}')
+    df = processar_microdados(pasta_extracao)
+
+    # Salvar o DataFrame consolidado e auditar o CSV gerado
+    if not df.empty:
+        caminho_csv = os.path.join(pasta_dados, f'{fonte}_dados_brutos.csv')
+        df.to_csv(caminho_csv, index=False)
+        print(f'Dados processados e salvos em: {caminho_csv}')
+
+        # Auditoria: mostra head e informações básicas desse CSV bruto consolidado
+        auditar_csv(caminho_csv, etapa="coleta_bruta", contexto=fonte, n=5)
+    else:
+        print(f'Nenhum dado válido processado para {fonte}.')
+
 def main():
     # URLs reais dos microdados
     urls = {
@@ -111,28 +155,7 @@ def main():
     os.makedirs(pasta_dados, exist_ok=True)
     
     for fonte, url in urls.items():
-        zip_caminho = os.path.join(pasta_dados, f'{fonte}.zip')
-        pasta_extracao = os.path.join(pasta_dados, fonte)
-        os.makedirs(pasta_extracao, exist_ok=True)
-        
-        # Baixar o arquivo
-        print(f'Baixando dados da fonte: {fonte}')
-        baixar_arquivo(url, zip_caminho)
-        
-        # Extrair o arquivo
-        print(f'Extraindo dados da fonte: {fonte}')
-        extrair_arquivo(zip_caminho, pasta_extracao)
-        
-        # Processar os dados
-        print(f'Processando dados da fonte: {fonte}')
-        df = processar_microdados(pasta_extracao)
-        
-        # Salvar o DataFrame consolidado
-        if not df.empty:
-            df.to_csv(os.path.join(pasta_dados, f'{fonte}_dados_brutos.csv'), index=False)
-            print(f'Dados processados e salvos em: {os.path.join(pasta_dados, f"{fonte}_dados_brutos.csv")}')
-        else:
-            print(f'Nenhum dado válido processado para {fonte}.')
+        baixar_dados_ano(fonte, url, pasta_dados)
 
 if __name__ == '__main__':
     main()

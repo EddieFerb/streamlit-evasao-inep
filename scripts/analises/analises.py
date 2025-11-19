@@ -9,6 +9,25 @@ import plotly.graph_objects as go
 import re
 from glob import glob
 
+# ==== EDA/Audit Imports e Auditoria Inicial ====
+import sys
+from pathlib import Path
+
+# Garante que a raiz do projeto esteja no sys.path para permitir imports do pacote scripts
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+from scripts.utils.inspecao import registrar_ambiente, auditar_df
+
+registrar_ambiente(etapa="analises", contexto="antes_eda")
+
+# Carrega o consolidado para EDA geral
+df_eda = pd.read_csv("./dados/processado/dados_ingresso_evasao_conclusao.csv", sep=";")
+
+# Auditoria antes de qualquer transformação mais pesada
+auditar_df(df_eda, etapa="analises", contexto="df_bruto_para_eda", n=5)
+
 # Define o mapeamento de cores: verde para "Taxa de Conclusão" e vermelho para "Taxa de Evasão"
 color_map = {"Taxa de Conclusão": "green", "Taxa de Evasão": "red"}
 
@@ -237,6 +256,13 @@ plot_taxa(administracao_long, "Administração")
 # =============================================================================
 # Exportação dos dados processados
 # =============================================================================
+# =============================================================================
+# Auditoria após filtros básicos (exemplo: EDA sobre subconjunto filtrado)
+# Aqui usamos uma cópia do df_eda; você pode substituir por um subconjunto específico
+# caso aplique filtros adicionais na análise exploratória.
+df_filtrado = df_eda.copy()
+auditar_df(df_filtrado, etapa="analises", contexto="apos_filtros_basicos", n=5)
+
 ingress_wide.to_csv("dados/processado/final_ingressantes.csv", index=False, sep=";")
 df_eng.to_csv("dados/processado/final_eng_civil.csv", index=False, sep=";")
 df_dir.to_csv("dados/processado/final_direito.csv", index=False, sep=";")
