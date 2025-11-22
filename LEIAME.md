@@ -4,24 +4,28 @@ Este repositório apresenta uma aplicação completa para predição da evasão 
 
 Objetivo
 
-Desenvolver uma aplicação prática que incorpore pelo menos um algoritmo de aprendizado de máquina estudado na disciplina (regressão, classificação ou ensembles).  O foco é aplicar técnicas de ciência de dados para estimar a taxa de evasão em cursos presenciais a partir dos microdados do INEP/MEC e disponibilizar os resultados por meio de uma interface amigável.  Nesta implementação utiliza‑se como modelo base a Random Forest, mas o pipeline permite testar outros algoritmos (Regressão Linear, RNA com fine‑tuning) conforme os requisitos.
+Desenvolver uma aplicação prática que incorpore pelo menos um algoritmo de aprendizado de máquina estudado na disciplina (regressão, classificação ou ensembles).  O foco é aplicar técnicas de ciência de dados para estimar a taxa de evasão em cursos presenciais a partir dos microdados do INEP/MEC e disponibilizar os resultados por meio de uma interface amigável.  Nesta implementação utiliza‑se como modelo base a Random Forest, mas o pipeline permite testar outros algoritmos (Regressão Linear, Feature_Based) conforme os requisitos.
 
-Estrutura de Pastas
-├── dados/                # Conjunto de dados utilizados no projeto
-│   ├── bruto/            # Dados brutos (microdados INEP) baixados diretamente das fontes oficiais
-│   ├── processado/       # Dados após limpeza e pré‑processamento
-│   └── intermediar/      # Dados temporários durante o tratamento
-├── modelos/              # Modelos treinados e métricas salvas
-├── notebooks/            # Jupyter notebooks exploratórios (opcional)
-├── scripts/              # Scripts Python para automação das etapas
-│   ├── coleta_dados/     # Coleta de microdados (ex.: coleta_dados_oficiais.py)
-│   ├── processamento/    # Pré‑processamento e engenharia de atributos
-│   ├── modelagem/        # Treinamento de modelos e fine‑tuning
-│   └── visualizacao/     # Geração de gráficos e relatórios
-├── app/                  # Aplicação Streamlit
-│   └── app_evasao.py     # Painel interativo com ajuste de hiperparâmetros
-├── requisitos.txt        # Dependências de projeto
-└── README.md             # Este documento
+Estrutura de pastas/arquivos principal
+├── dados/                     # Conjunto de dados utilizados no projeto
+│   ├── bruto/                 # Dados brutos (microdados INEP)
+│   ├── processado/            # Dados após limpeza e pré-processamento
+│   └── intermediario/         # Dados temporários
+├── modelos/                   # Modelos treinados e métricas salvas
+├── notebooks/                 # Notebooks Jupyter (opcional)
+├── scripts/                   # Scripts Python para todo o pipeline
+│   ├── analises/              # Análises exploratórias e validações
+│   ├── auditoria/             # Inspeções, logging, validação estrutural
+│   ├── coleta_dados/          # Coleta e download dos microdados do INEP
+│   ├── dashboard/app_evasao.py# Aplicação Streamlit (app_evasao.py)
+│   ├── modelagem/             # Treinamento, RF, Feature_based e avaliação de modelos
+│   ├── processamento_dados/   # Pré-processamento e tratamento dos dados
+│   ├── relatorio/             # Geração de relatórios, PDF, apêndices
+│   ├── utils/                 # Funções auxiliares (inspeção, helpers)
+│   ├── visualizacao/          # Gráficos, heatmaps, comparações
+│   └── rodar_pipeline.py      # Script orquestrador do pipeline completo
+├── requisitos.txt             # Lista de dependências
+└── README.md                  # Documento principal do projeto
 
 Dependências
 	•	Python 3.8 ou superior
@@ -109,7 +113,7 @@ Os scripts da pasta scripts/processamento permitem preparar diferentes conjuntos
 
 Treine os modelos de machine learning disponíveis executando os scripts de modelagem:
 	•	Modelo original (Random Forest + Regressão Linear) – scripts/modelagem/modelagem/modelagem.py
-	•	Modelo com engenharia de features (Random Forest) – scripts/modelagem/feature-based.py.py
+	•	Modelo com engenharia de features (Random Forest) – scripts/modelagem/feature_based.py.py
 	•	Modelo com fine‑tuning de rede neural (ANN) – scripts/modelagem/treinamento_modelo_Fine-tuning.py (opcional)
 	•	Modelo com árvore C4.5/J48 – scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py (avaliado como alternativa)
 

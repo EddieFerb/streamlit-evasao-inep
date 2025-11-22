@@ -4,24 +4,29 @@ This repository presents a complete application for predicting academic dropout 
 
 Objective
 
-Develop a practical application that incorporates at least one machine learning algorithm studied in the course (regression, classification, or ensembles). The goal is to apply data science techniques to estimate dropout rates in on-campus courses using INEP/MEC microdata and present the results through a user-friendly interface. In this implementation the base model is a Random Forest, but the pipeline allows testing other algorithms (Linear Regression, neural networks with fine-tuning) as required.
+Develop a practical application that incorporates at least one machine learning algorithm studied in the course (regression, classification, or ensembles). The goal is to apply data science techniques to estimate dropout rates in on-campus courses using INEP/MEC microdata and present the results through a user-friendly interface. In this implementation the base model is a Random Forest, but the pipeline allows testing other algorithms (Linear Regression, Feature_Based) as required.
 
-Folder Structure
-├── dados/                # Dataset(s) used in the project
-│   ├── bruto/            # Raw data (INEP microdata) downloaded directly from official sources
-│   ├── processado/       # Data after cleaning and preprocessing
-│   └── intermediario/    # Temporary data generated during processing
-├── modelos/              # Trained models and saved metrics
-├── notebooks/            # Exploratory Jupyter notebooks (optional)
-├── scripts/              # Python scripts for process automation
-│   ├── coleta_dados/     # Microdata collection (e.g., coleta_dados_oficiais.py)
-│   ├── processamento/    # Preprocessing and feature engineering
-│   ├── modelagem/        # Model training and fine-tuning
-│   └── visualizacao/     # Generation of charts and reports
-├── app/                  # Streamlit application
-│   └── app_evasao.py     # Interactive dashboard with hyperparameter controls
-├── requisitos.txt        # Project dependencies
-└── README.md             # This document
+Main Folder Structure
+├── dados/                     # Datasets used in the project
+│   ├── bruto/                 # Raw INEP microdata
+│   ├── processado/            # Data after cleaning and preprocessing
+│   └── intermediario/         # Temporary intermediate data
+├── modelos/                   # Trained models and saved evaluation metrics
+├── notebooks/                 # Jupyter notebooks (optional)
+├── scripts/                   # Python scripts for the entire pipeline
+│   ├── analises/              # Exploratory analyses and validation routines
+│   ├── auditoria/             # Structural checks, logging, inspection tools
+│   ├── coleta_dados/          # INEP microdata retrieval and download automation
+│   ├── dashboard/             # Streamlit UI layer
+│   │   └── app_evasao.py      # Interactive Streamlit dashboard
+│   ├── modelagem/             # Model training, RF, Feature-based, evaluation
+│   ├── processamento_dados/   # Data preprocessing and preparation
+│   ├── relatorio/             # PDF report generation and appendices
+│   ├── utils/                 # Helper utilities and shared functions
+│   ├── visualizacao/          # Charts, heatmaps, comparative visualizations
+│   └── rodar_pipeline.py      # Full pipeline orchestrator script
+├── requisitos.txt             # Project dependency list
+└── README.md                  # Main project documentation
 
 Here is the requested translation into U.S. English. All folder and script names (e.g., requisitos.txt, scripts/coleta_dados/coleta_dados_oficiais.py) have been preserved in Portuguese as instructed.
 
@@ -111,7 +116,7 @@ For the Streamlit project, it is recommended to start with the variables taxa_in
 4. Modeling
 Train the machine learning models by running the modeling scripts:
 	•	Original model (Random Forest + Linear Regression) — scripts/modelagem/modelagem/modelagem.py
-	•	Model with feature engineering (Random Forest) — scripts/modelagem/feature-based.py.py
+	•	Model with feature engineering (Random Forest) — scripts/modelagem/feature_based.py.py
 	•	Model with neural network fine-tuning (ANN) — scripts/modelagem/treinamento_modelo_Fine-tuning.py (optional)
 	•	C4.5/J48 decision tree model — scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py (evaluated as an alternative)
 

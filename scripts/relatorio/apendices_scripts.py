@@ -19,7 +19,7 @@ script_paths = [
     "scripts/modelagem/gerar_base_modelo.py",
     "scripts/modelagem/modelagem.py",
     "scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py",
-    "scripts/modelagem/feature-based.py.py",
+    "scripts/modelagem/feature_based.py.py",
     "scripts/modelagem/treinamento_modelo_Fine-tuning.py",
     "scripts/analises/analises.py",
     "scripts/analises/comparar_modelos.py",

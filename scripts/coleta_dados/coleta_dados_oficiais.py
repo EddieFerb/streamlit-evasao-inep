@@ -153,6 +153,17 @@ def main():
     # Caminho para salvar os dados
     pasta_dados = './dados/bruto'
     os.makedirs(pasta_dados, exist_ok=True)
+
+    # Listar pastas/arquivos já existentes em pasta_dados
+    existentes = os.listdir(pasta_dados)
+    anos_existentes = [nome for nome in existentes if nome.startswith('INEP_')]
+    print("Pastas/arquivos já existentes em '{}':".format(pasta_dados))
+    print("Anos já existentes (pastas que começam com 'INEP_'):", anos_existentes)
+    print("Anos/URLs que serão baixados:", list(urls.keys()))
+    opcao = input("Deseja baixar novamente os arquivos? (1 = sim, 2 = não): ").strip()
+    if opcao == "2":
+        print("Download ignorado pelo usuário.")
+        return
     
     for fonte, url in urls.items():
         baixar_dados_ano(fonte, url, pasta_dados)
