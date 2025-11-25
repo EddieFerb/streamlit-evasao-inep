@@ -1,5 +1,6 @@
 # scripts/coleta_dados/coleta_dados_oficiais.py
 # Este script realiza a coleta e processamento de microdados oficiais do INEP e MEC.
+# Objeticve: This script performs the collection of official microdata from INEP and MEC.
 
 import os
 import sys
@@ -156,11 +157,29 @@ def main():
 
     # Listar pastas/arquivos já existentes em pasta_dados
     existentes = os.listdir(pasta_dados)
-    anos_existentes = [nome for nome in existentes if nome.startswith('INEP_')]
-    print("Pastas/arquivos já existentes em '{}':".format(pasta_dados))
-    print("Anos já existentes (pastas que começam com 'INEP_'):", anos_existentes)
-    print("Anos/URLs que serão baixados:", list(urls.keys()))
-    opcao = input("Deseja baixar novamente os arquivos? (1 = sim, 2 = não): ").strip()
+
+    # Fontes já baixadas podem aparecer como pastas "MICRODADOS_..." ou como CSVs consolidados "<fonte>_dados_brutos.csv"
+    pastas_inep = [nome for nome in existentes if nome.startswith("MICRODADOS_CADASTRO_CURSOS_") and os.path.isdir(os.path.join(pasta_dados, nome))]
+    csvs_consolidados = [nome for nome in existentes if nome.endswith("_dados_brutos.csv")]
+
+    fontes_csv = [nome.replace("_dados_brutos.csv", "") for nome in csvs_consolidados]
+    fontes_baixadas = sorted(set(pastas_inep + fontes_csv))
+
+    print(f"Pastas/arquivos já existentes em '{pasta_dados}':")
+    if not fontes_baixadas:
+        print("Nenhum microdado foi encontrado — iniciando download automaticamente.")
+        opcao = "1"  # Baixar sem perguntar
+    else:
+        print("Fontes já baixadas (pastas ou CSVs consolidados):", fontes_baixadas)
+        fontes_pendentes = [fonte for fonte in urls.keys() if fonte not in fontes_baixadas]
+        if fontes_pendentes:
+            print("Fontes ainda não baixadas (pendentes):", fontes_pendentes)
+        else:
+            print("Nenhuma fonte pendente: todos os anos já possuem pasta ou CSV consolidado.")
+
+        print("Anos/URLs configurados para download:", list(urls.keys()))
+        opcao = input("Deseja baixar novamente os arquivos (todos os anos da lista)? (1 = sim, 2 = não): ").strip()
+
     if opcao == "2":
         print("Download ignorado pelo usuário.")
         return

@@ -1,5 +1,6 @@
 # scripts/coleta_dados/coletar_links_inep.py
 # Este script coleta os links dos microdados do Censo da Educação Superior do site do INEP (1995-2023).
+# Objettive: This script collects the links of the Higher Education Census microdata from the INEP website (1995-2023).
 
 import os
 import sys

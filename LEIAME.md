@@ -1,10 +1,10 @@
 Projeto Prático de Aprendizado de Máquina com Streamlit – Reconhecimento de Padrões
 
-Este repositório apresenta uma aplicação completa para predição da evasão acadêmica em cursos de Instituições de Ensino Superior (IES) públicas utilizando os microdados do Censo da Educação Superior do INEP/MEC.  A aplicação foi desenvolvida no contexto da disciplina Reconhecimento de Padrões (2COP507) e segue as exigências dos professores Bruno Zarpelão e Sylvio Barbon Jr. para o projeto prático com Streamlit.  Além de demonstrar o pipeline de coleta, processamento e modelagem, a aplicação inclui uma interface interativa em Streamlit com opções de ajuste de hiperparâmetros e visualização de resultados.
+Este repositório apresenta uma aplicação completa para predição da evasão acadêmica em cursos de Instituições de Ensino Superior (IES) públicas utilizando os microdados do Censo da Educação Superior do INEP/MEC.  A aplicação foi desenvolvida no contexto da disciplina Reconhecimento de Padrões (2COP507) e segue as exigências dos professores Dr. Bruno B. Zarpelão e Dr. Sylvio Barbon Jr. para o projeto prático com Streamlit.  Além de demonstrar o pipeline de coleta, processamento e modelagem, a aplicação inclui uma interface interativa em Streamlit com opções de ajuste de hiperparâmetros e visualização de resultados.
 
 Objetivo
 
-Desenvolver uma aplicação prática que incorpore pelo menos um algoritmo de aprendizado de máquina estudado na disciplina (regressão, classificação ou ensembles).  O foco é aplicar técnicas de ciência de dados para estimar a taxa de evasão em cursos presenciais a partir dos microdados do INEP/MEC e disponibilizar os resultados por meio de uma interface amigável.  Nesta implementação utiliza‑se como modelo base a Random Forest, mas o pipeline permite testar outros algoritmos (Regressão Linear, Feature_Based) conforme os requisitos.
+Desenvolver uma aplicação prática que incorpore pelo menos um algoritmo de aprendizado de máquina estudado na disciplina (regressão, classificação ou ensembles).  O foco é aplicar técnicas de ciência de dados para estimar a taxa de evasão em cursos presenciais a partir dos microdados do INEP/MEC e disponibilizar os resultados por meio de uma interface amigável.  Nesta implementação utiliza‑se como modelo base a Random Forest, mas o pipeline permite testar outros algoritmos (Regressão Linear, Feature_Based e Fine-Tuning) conforme os requisitos.
 
 Estrutura de pastas/arquivos principal
 ├── dados/                     # Conjunto de dados utilizados no projeto
@@ -57,8 +57,12 @@ Pipeline do Projeto
 5. Análises exploratórias  
    `python scripts/analises/analises.py`
 
-6. Treinar modelos de previsão  
-   `python scripts/modelagem/modelagem.py`
+6. Treinar modelos de previsão Random Forest (Modelo principal)  
+   `python scripts/modelagem/randomforest.py`
+   6.2 Treinar modelos de previsão Fine_Tuning (Modelo opcional)
+   `python scripts/modelagem/fine_tuning.py`
+   6.3 Treinar modelos de previsão Feature_Based (Modelo opcional)
+   `python scripts/modelagem/feature_based.py`
 
 7. Gerar gráficos para o relatório  
    `python scripts/visualizacao/gerar_graficos.py`
@@ -112,12 +116,12 @@ Os scripts da pasta scripts/processamento permitem preparar diferentes conjuntos
 4. Modelagem
 
 Treine os modelos de machine learning disponíveis executando os scripts de modelagem:
-	•	Modelo original (Random Forest + Regressão Linear) – scripts/modelagem/modelagem/modelagem.py
+	•	Modelo original (Random Forest + Regressão Linear) – scripts/modelagem/randomforest.py
 	•	Modelo com engenharia de features (Random Forest) – scripts/modelagem/feature_based.py.py
 	•	Modelo com fine‑tuning de rede neural (ANN) – scripts/modelagem/treinamento_modelo_Fine-tuning.py (opcional)
 	•	Modelo com árvore C4.5/J48 – scripts/modelagem/treinamento_modelo_C4.5_Tree_J48.py (avaliado como alternativa)
 
-Os scripts dividem o conjunto de dados em treino e teste, treinam os modelos e registram métricas (MSE, R²) em modelos/resultados_modelos/.  Por padrão, o script modelagem/modelagem.py compara Regressão Linear com Random Forest e salva o melhor modelo.  Você pode ajustar os hiperparâmetros diretamente nos scripts ou pelo painel Streamlit.
+Os scripts dividem o conjunto de dados em treino e teste, treinam os modelos e registram métricas (MSE, R²) em modelos/resultados_modelos/.  Por padrão, o script modelagem/randomforest.py compara Regressão Linear com Random Forest e salva o melhor modelo.  Você pode ajustar os hiperparâmetros diretamente nos scripts ou pelo painel Streamlit.
 
 5. Avaliação e Visualização
 
