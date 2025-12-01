@@ -143,6 +143,8 @@ streamlit run app/app_evasao.py
 
 Para a entrega final, grave um vídeo de até 15 minutos explicando: (1) a motivação do projeto, (2) como o pipeline foi construído, (3) o funcionamento do modelo e (4) a interface Streamlit.  Além disso, crie um artigo curto (até 4 páginas) no template da SBC descrevendo a escolha dos algoritmos, os hiperparâmetros testados (justificando os valores escolhidos) e discutindo os resultados e melhorias futuras.
 
+Obs.: Além do pipeline principal, explorei abordagens paralelas (fine-tuning e feature-based) apenas como experimentação adicional, não incluídas no projeto final. 
+
 Sobre o Reuso dos Modelos
 
 Os modelos Random Forest já treinados nos scripts originais podem servir de baseline, mas recomenda‑se ajustá‑los quando integrados à aplicação Streamlit.  Dois motivos principais justificam o ajuste:

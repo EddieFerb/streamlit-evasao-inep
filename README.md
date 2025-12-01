@@ -145,7 +145,7 @@ For the final submission:
 	•	Record a video (up to 15 minutes) explaining:
 (1) project motivation, (2) the constructed pipeline, (3) how the model works, and (4) the Streamlit interface.
 	•	Additionally, prepare a short article (up to 4 pages) using the SBC template. The document should describe the choice of algorithms, tested hyperparameters (with justification), and discuss results and future improvements.
-
+Note: In addition to the main pipeline, I explored parallel approaches (fine-tuning and feature-based modeling) purely as additional experimentation. These methods were not included in the final project deliverable.
 ⸻
 
 About Model Reuse
