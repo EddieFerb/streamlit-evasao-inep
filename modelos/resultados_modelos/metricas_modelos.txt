@@ -4,22 +4,22 @@ Modelo de evasão escolhido: Random Forest
 MSE - Regressão Linear: 0.0563, R²: 0.3626
 MSE - Random Forest:   0.0000, R²: 0.9999
 
-=== Classificação binária da evasão (threshold 0.30) ===
-Acurácia: 0.9976
-Precisão: 0.9996
-Recall:   0.9975
-F1-score: 0.9986
+=== Classificação binária da evasão (threshold 0.50) ===
+Acurácia: 0.9997
+Precisão: 0.9999
+Recall:   0.9996
+F1-score: 0.9998
 
 Matriz de confusão:
-[[ 21992     43]
- [   307 121348]]
+[[44588     5]
+ [   39 99058]]
 
 Relatório de classificação:
               precision    recall  f1-score   support
 
-Baixa evasão       0.99      1.00      0.99     22035
- Alta evasão       1.00      1.00      1.00    121655
+Baixa evasão       1.00      1.00      1.00     44593
+ Alta evasão       1.00      1.00      1.00     99097
 
     accuracy                           1.00    143690
-   macro avg       0.99      1.00      1.00    143690
+   macro avg       1.00      1.00      1.00    143690
 weighted avg       1.00      1.00      1.00    143690
