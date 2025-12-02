@@ -24,7 +24,7 @@ Estrutura de pastas/arquivos principal
 │   ├── utils/                 # Funções auxiliares (inspeção, helpers)
 │   ├── visualizacao/          # Gráficos, heatmaps, comparações
 │   └── rodar_pipeline.py      # Script orquestrador do pipeline completo
-├── requisitos.txt             # Lista de dependências
+├── requirements.txt             # Lista de dependências
 └── README.md                  # Documento principal do projeto
 
 Dependências
@@ -32,11 +32,11 @@ Dependências
 	•	Streamlit￼ para a interface interativa
 	•	Bibliotecas de modelagem e visualização: pandas, numpy, scikit‑learn, seaborn, matplotlib
 	•	tensorflow/keras (opcional) para redes neurais
-	•	Consulte o arquivo requisitos.txt para a lista completa.  Instale as dependências com:
+	•	Consulte o arquivo requirements.txt para a lista completa.  Instale as dependências com:
 
     python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requisitos.txt
+pip install -r requirements.txt
 
 Pipeline do Projeto
 
@@ -74,7 +74,7 @@ Pipeline do Projeto
 
 Executar o pipeline completo (Script Orquestrador)
 
-Execute todo o pipeline de ponta a ponta (coleta de dados, pré-processamento, modelagem e visualização) usando o script orquestrador. Certifique-se de que o ambiente virtual esteja ativado e que as dependências do arquivo requisitos.txt estejam instaladas antes de executar.
+Execute todo o pipeline de ponta a ponta (coleta de dados, pré-processamento, modelagem e visualização) usando o script orquestrador. Certifique-se de que o ambiente virtual esteja ativado e que as dependências do arquivo requirements.txt estejam instaladas antes de executar.
 
 Ative o ambiente virtual:
    `source .venv/bin/activate`

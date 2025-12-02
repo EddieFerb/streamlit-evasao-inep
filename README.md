@@ -25,10 +25,10 @@ Main Folder Structure
 │   ├── utils/                 # Helper utilities and shared functions
 │   ├── visualizacao/          # Charts, heatmaps, comparative visualizations
 │   └── rodar_pipeline.py      # Full pipeline orchestrator script
-├── requisitos.txt             # Project dependency list
+├── requirements.txt             # Project dependency list
 └── README.md                  # Main project documentation
 
-Here is the requested translation into U.S. English. All folder and script names (e.g., requisitos.txt, scripts/coleta_dados/coleta_dados_oficiais.py) have been preserved in Portuguese as instructed.
+Here is the requested translation into U.S. English. All folder and script names (e.g., requirements.txt, scripts/coleta_dados/coleta_dados_oficiais.py) have been preserved in Portuguese as instructed.
 
 ⸻
 
@@ -37,10 +37,10 @@ Dependencies
 	•	Streamlit for the interactive interface
 	•	Modeling and visualization libraries: pandas, numpy, scikit-learn, seaborn, matplotlib
 	•	tensorflow/keras (optional) for neural networks
-	•	See the requisitos.txt file for the complete list. Install dependencies with:
+	•	See the requirements.txt file for the complete list. Install dependencies with:
 	python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requisitos.txt
+pip install -r requirements.txt
 
 
 ⸻
@@ -76,7 +76,7 @@ Project Pipeline
 
 Run the end-to-end pipeline (Orchestrator script)
 
-Execute the complete pipeline (data collection, preprocessing, modeling, and visualization) using the orchestrator script. Ensure the virtual environment is activated and dependencies from requisitos.txt are installed before running.
+Execute the complete pipeline (data collection, preprocessing, modeling, and visualization) using the orchestrator script. Ensure the virtual environment is activated and dependencies from requirements.txt are installed before running.
 
 Activate the virtual environment:
    `source .venv/bin/activate`
