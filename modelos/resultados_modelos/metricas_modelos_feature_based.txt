@@ -1,0 +1,24 @@
+=== REGRESSÃO — taxa_evasao ===
+MSE: 0.0000
+R² : 0.9999
+
+=== CLASSIFICAÇÃO — evasao_alta (> 0.5) ===
+Acurácia : 0.9829
+Precisão : 0.9867
+Recall   : 0.9880
+F1-score : 0.9873
+
+Matriz de confusão:
+[[45504  1295]
+ [ 1159 95732]]
+
+Relatório de classificação:
+              precision    recall  f1-score   support
+
+Baixa evasão       0.98      0.97      0.97     46799
+ Alta evasão       0.99      0.99      0.99     96891
+
+    accuracy                           0.98    143690
+   macro avg       0.98      0.98      0.98    143690
+weighted avg       0.98      0.98      0.98    143690
+

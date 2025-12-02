@@ -1,0 +1,17 @@
+FINE-TUNING XGBOOST × RANDOM FOREST × FEATURE-BASED
+========================================================================
+
+[1] Dataset consolidado — dados_ingresso_evasao_conclusao.csv
+
+Métricas de REGRESSÃO (taxa_evasao):
+-----------------------------------
+- RF              | MAE=0.000219 | RMSE=0.001708 | R2=0.999967
+- XGB             | MAE=0.006137 | RMSE=0.011471 | R2=0.998513
+- Feature-Based   | MAE=0.000160 | RMSE=0.001701 | R2=0.999967
+
+
+Métricas de CLASSIFICAÇÃO (evasao_alta):
+---------------------------------------
+- RF              | ACC=0.9982 | F1=0.9982 | PREC=0.9995 | REC=0.9970
+- XGB             | ACC=0.9986 | F1=0.9986 | PREC=0.9988 | REC=0.9984
+- Feature-Based   | ACC=0.8126 | F1=0.8425 | PREC=0.7279 | REC=0.9999

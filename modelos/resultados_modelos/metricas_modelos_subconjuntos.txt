@@ -1,0 +1,36 @@
+Resultados por subconjunto de variáveis (taxa_evasao)
+======================================================================
+
+Subconjunto: oferta_demanda
+Features: ['numero_cursos', 'vagas_totais', 'inscritos_totais', 'ingressantes']
+Regressão Linear  -> MSE: 0.0872, R²: 0.0123
+Random Forest     -> MSE: 0.0871, R²: 0.0136
+Melhor modelo: Random Forest
+Classificação binária (threshold 0.30) -> Acurácia: 0.8465, Precisão: 0.8468, Recall: 0.9995, F1: 0.9168
+Matriz de confusão:
+[[    32  22003]
+ [    56 121599]]
+----------------------------------------------------------------------
+
+Subconjunto: fluxo_academico
+Features: ['ingressantes', 'matriculados', 'concluintes']
+Regressão Linear  -> MSE: 0.0566, R²: 0.3593
+Random Forest     -> MSE: 0.0000, R²: 0.9999
+Melhor modelo: Random Forest
+Classificação binária (threshold 0.30) -> Acurácia: 0.9976, Precisão: 0.9997, Recall: 0.9975, F1: 0.9986
+Matriz de confusão:
+[[ 21994     41]
+ [   307 121348]]
+----------------------------------------------------------------------
+
+Subconjunto: geral_compacto
+Features: ['numero_cursos', 'vagas_totais', 'inscritos_totais', 'ingressantes', 'matriculados', 'concluintes']
+Regressão Linear  -> MSE: 0.0563, R²: 0.3626
+Random Forest     -> MSE: 0.0000, R²: 0.9999
+Melhor modelo: Random Forest
+Classificação binária (threshold 0.30) -> Acurácia: 0.9976, Precisão: 0.9996, Recall: 0.9975, F1: 0.9986
+Matriz de confusão:
+[[ 21992     43]
+ [   307 121348]]
+----------------------------------------------------------------------
+
