@@ -13,6 +13,9 @@ acessibilidade_web/graficos/
 # Não versionar microdados, CSVs e textos derivados
 # *.csv
 *.txt
+dados/bruto/*.csv
+dados/bruto/*zip
+dados/intermediario/*.csv
 
 # PDFs grandes, relatórios finais, TCC etc.
 # *.pdf
