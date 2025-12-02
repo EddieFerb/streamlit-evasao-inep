@@ -560,13 +560,9 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from scripts.modelagem.randomforest import (
-    treinar_modelos,
-    carregar_ou_treinar_modelos_streamlit,
-)
+from scripts.modelagem.randomforest import treinar_modelos
 
 CAMINHO_DADOS = BASE_DIR / "dados" / "processado" / "dados_ingresso_evasao_conclusao.csv"
-CAMINHO_MODELO_BASE = BASE_DIR / "modelos" / "modelos_salvos" / "modelo_melhor_evasao.pkl"
 
 # ===============================
 #  CONFIGURAÇÃO DO LAYOUT STREAMLIT
@@ -599,33 +595,45 @@ def load_reference_data() -> pd.DataFrame:
 df_ref = load_reference_data()
 
 # ===============================
-#  CARREGAR MODELO BASE (treino/carregamento em runtime)
+#  CARREGAR MODELO BASE (leve, em runtime)
 # ===============================
-
 @st.cache_resource(show_spinner=True)
 def load_base_model():
-    # Usa a camada de modelagem que treina ou carrega os modelos em tempo de execução
-    with st.spinner(
-        "Treinando modelos de evasão na primeira execução "
-        "(pode levar alguns minutos, dependendo do tamanho dos dados)..."
-    ):
-        modelos = carregar_ou_treinar_modelos_streamlit()
-    return modelos["modelo_melhor_evasao"]
+    with st.spinner("Treinando modelo base inicial (leve)..."):
+        df = load_reference_data()
 
-modelo_base = load_base_model()
+        feature_cols = [
+            "numero_cursos",
+            "vagas_totais",
+            "inscritos_totais",
+            "ingressantes",
+            "matriculados",
+            "concluintes",
+        ]
 
-if hasattr(modelo_base, "feature_names_in_"):
-    FEATURE_COLS = list(modelo_base.feature_names_in_)
-else:
-    FEATURE_COLS = [
-        "numero_cursos",
-        "vagas_totais",
-        "inscritos_totais",
-        "ingressantes",
-        "matriculados",
-        "concluintes",
-    ]
+        # Remove linhas com NaN nas features ou na taxa de evasão
+        df_model = df.dropna(subset=feature_cols + ["taxa_evasao"]).copy()
 
+        # ---- AMOSTRAGEM PARA FICAR RÁPIDO NO STREAMLIT CLOUD ----
+        if len(df_model) > 50000:
+            df_model = df_model.sample(50000, random_state=42)
+
+        X = df_model[feature_cols]
+        y = df_model["taxa_evasao"]
+
+        modelo = RandomForestRegressor(
+            n_estimators=50,
+            max_depth=10,
+            min_samples_split=4,
+            min_samples_leaf=2,
+            n_jobs=-1,
+            random_state=42,
+        )
+        modelo.fit(X, y)
+
+    return modelo, feature_cols
+
+modelo_base, FEATURE_COLS = load_base_model()
 stats = df_ref[FEATURE_COLS].describe()
 
 # ===============================
