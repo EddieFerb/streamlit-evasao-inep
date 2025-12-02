@@ -601,15 +601,13 @@ df_ref = load_reference_data()
 # ===============================
 #  CARREGAR MODELO BASE (treino/carregamento em runtime)
 # ===============================
-@st.cache_resource(show_spinner=False)
+
+@st.cache_resource(show_spinner=True)
 def load_base_model():
-    # Aqui usamos a camada de modelagem que:
-    # - se os .pkl já existirem em modelos/modelos_salvos, apenas carrega;
-    # - se não existirem (primeira execução no Streamlit Cloud),
-    #   treina todos os modelos em tempo de execução e salva os .pkl.
+    # Usa a camada de modelagem que treina ou carrega os modelos em tempo de execução
     with st.spinner(
-        "Carregando / treinando modelos de evasão "
-        "(primeira execução pode levar alguns segundos)..."
+        "Treinando modelos de evasão na primeira execução "
+        "(pode levar alguns minutos, dependendo do tamanho dos dados)..."
     ):
         modelos = carregar_ou_treinar_modelos_streamlit()
     return modelos["modelo_melhor_evasao"]
