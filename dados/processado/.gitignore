@@ -1,0 +1,19 @@
+
+# ============================
+# CSVs de dados_processado não usados pelo app Streamlit
+# ============================
+
+# Ignora todos os CSVs processados...
+dados/processado/dados_cursos_*.csv
+dados/processado/dados_ies_*.csv
+dados/processado/dados_cursos_tratado_*.csv
+dados/processado/dados_ies_tratado_*.csv
+
+# ...EXCETO os que o app_evasao.py realmente consome em produção
+!dados/processado/dados_ingresso_evasao_conclusao.csv
+!dados/processado/final_administracao.csv
+!dados/processado/final_direito.csv
+!dados/processado/final_eng_civil.csv
+!dados/processado/final_medicina.csv
+!dados/processado/final_ingressantes.csv
+!dados/processado/dados_cursos_serie_temporal.csv
