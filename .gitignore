@@ -1,8 +1,9 @@
 # ============================
 # Dados e arquivos sensíveis (NÃO VERSIONAR)
 # ============================
-dados/
-modelos/
+# dados/
+# modelos/
+dados/bruto/
 resultados/
 relatorios/
 documentos/graficos/
@@ -10,11 +11,11 @@ notebooks/
 acessibilidade_web/graficos/
 
 # Não versionar microdados, CSVs e textos derivados
-*.csv
+# *.csv
 *.txt
 
 # PDFs grandes, relatórios finais, TCC etc.
-*.pdf
+# *.pdf
 
 # Logs e arquivos temporários
 *.log
@@ -26,7 +27,7 @@ log_erros.txt
 # ============================
 # Modelos e artefatos treinados
 # ============================
-*.pkl
+# *.pkl
 *.h5
 
 # ============================
