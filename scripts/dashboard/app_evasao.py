@@ -560,7 +560,10 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from scripts.modelagem.randomforest import treinar_modelos
+from scripts.modelagem.randomforest import (
+    treinar_modelos,
+    carregar_ou_treinar_modelos_streamlit,
+)
 
 CAMINHO_DADOS = BASE_DIR / "dados" / "processado" / "dados_ingresso_evasao_conclusao.csv"
 CAMINHO_MODELO_BASE = BASE_DIR / "modelos" / "modelos_salvos" / "modelo_melhor_evasao.pkl"
@@ -600,7 +603,9 @@ df_ref = load_reference_data()
 # ===============================
 @st.cache_resource(show_spinner=False)
 def load_base_model():
-    return joblib.load(CAMINHO_MODELO_BASE)
+    # Usa a camada de modelagem que treina ou carrega os modelos em tempo de execução
+    modelos = carregar_ou_treinar_modelos_streamlit()
+    return modelos["modelo_melhor_evasao"]
 
 modelo_base = load_base_model()
 
