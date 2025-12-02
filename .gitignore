@@ -5,6 +5,7 @@
 # dados/
 # modelos/
 dados/bruto/
+dados/intermediario/
 resultados/
 relatorios/
 documentos/graficos/
@@ -96,3 +97,5 @@ dados/processado/dados_ies_tratado_*.csv
 !dados/processado/final_medicina.csv
 !dados/processado/final_ingressantes.csv
 !dados/processado/dados_cursos_serie_temporal.csv
+modelos/modelos_salvos/
+*.pkl
