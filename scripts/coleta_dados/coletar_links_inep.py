@@ -46,6 +46,7 @@ def salvar_links_em_arquivo(urls, caminho_arquivo):
     :param urls: Dicionário com os links e descrições.
     :param caminho_arquivo: Caminho do arquivo onde os links serão salvos.
     """
+    os.makedirs(os.path.dirname(caminho_arquivo), exist_ok=True)
     with open(caminho_arquivo, 'w') as arquivo:
         for chave, url in urls.items():
             arquivo.write(f"{chave}: {url}\n")
