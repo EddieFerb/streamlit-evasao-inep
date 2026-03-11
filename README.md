@@ -82,7 +82,7 @@ Activate the virtual environment:
    `source .venv/bin/activate`
 
 Run the orchestrator:
-   `python scripts/rodar_pipline.py`
+   `python scripts/rodar_pipeline.py`
 
 Then, run manually Launch Streamlit dashboard 
    `streamlit run scripts/dashboard/app_evasao.py`

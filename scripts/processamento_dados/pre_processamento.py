@@ -31,8 +31,8 @@ from scripts.utils.inspecao import registrar_ambiente, auditar_csv
 # ==========================================================================
 
 # Diretórios de entrada e saída (ajuste conforme sua estrutura)
-PASTA_BRUTO = "./dados/bruto"
-PASTA_PROCESSADO = "./dados/processado"
+PASTA_BRUTO = os.path.join(BASE_DIR, "dados", "bruto")
+PASTA_PROCESSADO = os.path.join(BASE_DIR, "dados", "processado")
 
 registrar_ambiente(etapa="pre_processamento", contexto="início")
 

@@ -6,3 +6,5 @@ jobli
 plotly
 requests
 beautifulsoup4
+python-docx
+python-documents
